@@ -3,4 +3,37 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <!-- 配置Dispatcher Servlet -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:/conf/applicationContext.xml</param-value>
+        <!--
+            通过contextConfigLocation参数指定Spring配置文件启动“业务层”的Spring容器
+            多个配置文件存在是使用逗号分隔
+         -->
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>jlibrary_web</servlet-name>
+        <!--
+            配置了名为jlibrary_web的DispatcherServlet，默认自动加载WEB-INF/jlibrary_web-servlet.xml
+            （即<servlet-name>-servlet.xml）
+            可以通过制定servlet→init-param:namespace来定义参照对象的xml文件
+        -->
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jlibrary_web</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+    <!--
+        ・Web层容器作为业务层容器的子容器存在，Web层容器可以引用业务层容器的Bean，反之则不可
+        ・一个web.xml可以配置多个DispatcherServlet，让每个DispatcherServlet处理不同的请求
+    -->
 </web-app>
